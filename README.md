@@ -2,6 +2,12 @@
 
 ## How To Run
 
+First of all you need to initialize a database by running
+
+    python3 init_db.py
+
+This creates a database.db with 6 records.
+
 Start the flask application
 
     export FLASK_APP=prog_lang_app.py
