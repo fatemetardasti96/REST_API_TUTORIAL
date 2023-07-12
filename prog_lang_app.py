@@ -9,7 +9,6 @@ def get_database_connection():
     return connection
 
 
-# @app.get("/programming_languages")
 def list_programming_languages():
     conn = get_database_connection()
     prog_langs = conn.execute("SELECT * FROM programming_languages").fetchall()
@@ -43,22 +42,36 @@ def programming_languages_route():
     elif request.method == "POST":
         return create_programming_language(request.get_json(force=True))
 
-# def update_programming_language(name, language_attrib):
-#     updating_lang = in_memory_datastore[name]
-#     updating_lang.update(language_attrib)
-#     return updating_lang
+def update_programming_language(name, language_attrib):
+    conn = get_database_connection()
+    contribution = request.json["contribution"]
+    sql = f'''
+         UPDATE programming_languages SET  
+         contribution = "{contribution}" 
+         WHERE language_name = "{name}"
+        '''
+    conn.execute(sql)
+    conn.commit()
+    conn.close()
+    return language_attrib
 
-# def delete_programming_language(language_name):
-#     deleting_language = in_memory_datastore[language_name]
-#     del in_memory_datastore[language_name]
-#     return deleting_language 
+def delete_programming_language(language_name):
+    sql = f'''
+        DELETE FROM programming_languages 
+        WHERE language_name="{language_name}"
+        '''
+    conn = get_database_connection()
+    conn.execute(sql)
+    conn.commit()
+    conn.close()
+    return language_name 
 
 
-# @app.route("/programming_languages/<language_name>", methods=["GET", "PUT", "DELETE"])
-# def programming_language_route(language_name):
-#     if request.method == "GET":
-#         return get_programming_language(language_name)
-#     elif request.method == "PUT":
-#         return update_programming_language(language_name, request.get_json(force=True))
-#     elif request.method == "DELETE":
-#         return delete_programming_language(language_name)
+@app.route("/programming_languages/<language_name>", methods=["GET", "PUT", "DELETE"])
+def programming_language_route(language_name):
+    if request.method == "GET":
+        return get_programming_language(language_name)
+    elif request.method == "PUT":
+        return update_programming_language(language_name, request.get_json(force=True))
+    elif request.method == "DELETE":
+        return delete_programming_language(language_name)
