@@ -39,7 +39,6 @@ This is the command to delete a programming language:
 
 ## To be Implemented in the Future 
 
-- create a database instead of the current dictionary
 - create nice project architecture
 - create front end
 - create ci/cd piepline (read data from other sources and insert into the database)
